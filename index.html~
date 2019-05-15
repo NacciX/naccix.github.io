@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 14px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+</style>
+<body>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <div id="drop" align=center></div>
+  <div id='vis-container'></div>
+  <script src="grouped_bar.js"></script>
+  
+</body>
