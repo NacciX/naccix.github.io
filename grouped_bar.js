@@ -93,7 +93,7 @@ var colorScale = d3.scale.linear()
 var margin_dot = {top: 10, right: 25, bottom: 10, left: 400};
 
 var width_dot = 1000 - margin_dot.left - margin_dot.right,
-    height_dot = 300 - margin_dot.top - margin_dot.bottom;
+    height_dot = 200 - margin_dot.top - margin_dot.bottom;
 
 
 
@@ -101,7 +101,7 @@ var widthScale_dot = d3.scale.linear()
     .range([ 0, width_dot]);
 
 var heightScale_dot = d3.scale.ordinal()
-    .rangeRoundBands([ margin_dot.top, height_dot], 0.2);
+    .rangeRoundBands([ margin_dot.top, height_dot], 0.1);
 
 var xAxis_dot = d3.svg.axis()
     .scale(widthScale_dot)
@@ -286,7 +286,7 @@ d3.json("all_data.json", function(error, data) {
 	//    });
 
 	// in this case, i know it's out of 100 because it's percents.
-	widthScale_dot.domain([-0.1, 0.9]);
+	widthScale_dot.domain([0., 0.9]);
 
 	// js map: will make a new array out of all the d.name fields
 	heightScale_dot.domain(dot_data[0].values.map(function(d) { return d.question; } ));
@@ -395,7 +395,7 @@ d3.json("all_data.json", function(error, data) {
 		})
 	    .append("title")
 	    .text(function(d) {
-		    return d.question + " in 2015: " + d.customer_score + "%";
+		    return d.question + " : " + d.customer_score + "%";
 		});
 
 	// add the axes
