@@ -815,7 +815,7 @@ d3.json("all_data.json", function(error, data) {
 		    return d;
 		})
 	    .text(function(d){
-		    return d;
+		    return d.slice(0,d.indexOf("("));
 		})
 
 
