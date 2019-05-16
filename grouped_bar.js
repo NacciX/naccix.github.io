@@ -22,7 +22,7 @@ var yAxis = d3.svg.axis()
     .orient("left");
 
 var color = d3.scale.ordinal()
-    .range(["#23637a","#d5d5d5"]);
+    .range(["#abfcff","#23637a"]);//a["#23637a","#d5d5d5"]);
 
 var svg = d3.select('#vis-container').append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -80,8 +80,8 @@ var defaultFill = "#aaa";
 
 
 var colorScale = d3.scale.linear()
-    .domain([0, 2, 20])
-    .range(['white', 'lightskyblue', '#23637a']);
+    .domain([0, 2, 10, 25])
+    .range(['white', '#abfcff', '#23637a', '#23637a']);
 //d3.scale.linear().domain([0,1,5,10,100])                                                                                                                                                            
 //     .interpolate(d3.interpolateHcl)                                                                                                                                                                
 //    .range([d3.rgb("FFFFFF"),d3.rgb("#FF6347"),d3.rgb("#f7f7f7"),d3.rgb("#67a9cf"),d3.rgb("0C00FF")]);//d3.rgb("#043927"), d3.rgb("#98f898")]);                                                     
