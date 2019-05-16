@@ -1,7 +1,7 @@
 ///////////////////BAR VARIABLES
 var margin = {top: 20, right: 0, bottom: 20, left: 40},
     width = 500 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+    height = 300 - margin.top - margin.bottom;
 
 var x0 = d3.scale.ordinal()
     .rangeRoundBands([0, width], .2);
@@ -22,7 +22,7 @@ var yAxis = d3.svg.axis()
     .orient("left");
 
 var color = d3.scale.ordinal()
-    .range(["#92c5de","#d5d5d5","#0571b0"]);
+    .range(["#23637a","#d5d5d5"]);
 
 var svg = d3.select('#vis-container').append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -35,7 +35,7 @@ var svg = d3.select('#vis-container').append("svg")
 
 /////////////////MAP VARIABLES
 var width_map = 600,
-    height_map = 500;
+    height_map = 400;
 // sets the type of view                                                                                                                                                                              
 var projection = d3.geo.albersUsa()
     .scale(800) // size, bigger is bigger                                                                                                                                                            
@@ -80,8 +80,8 @@ var defaultFill = "#aaa";
 
 
 var colorScale = d3.scale.linear()
-    .domain([0, 2, 25])
-    .range(['white', 'lightskyblue', 'skyblue']);
+    .domain([0, 2, 20])
+    .range(['white', 'lightskyblue', '#23637a']);
 //d3.scale.linear().domain([0,1,5,10,100])                                                                                                                                                            
 //     .interpolate(d3.interpolateHcl)                                                                                                                                                                
 //    .range([d3.rgb("FFFFFF"),d3.rgb("#FF6347"),d3.rgb("#f7f7f7"),d3.rgb("#67a9cf"),d3.rgb("0C00FF")]);//d3.rgb("#043927"), d3.rgb("#98f898")]);                                                     
@@ -116,8 +116,44 @@ var yAxis_dot = d3.svg.axis()
 
 
 var fullwidth = 1000,
-    fullheight = 500;
+    fullheight = 200;
 var svg_dot = d3.select("#dot")
+    .append("svg")
+    .attr("width", fullwidth)
+    .attr("height", fullheight);
+
+
+
+
+/////////////////////DOT PLOT 2
+var margin_dot_2 = {top: 10, right: 25, bottom: 10, left: 600};
+
+var width_dot_2 = 1000 - margin_dot_2.left - margin_dot_2.right,
+    height_dot_2 = 300 - margin_dot_2.top - margin_dot_2.bottom;
+
+
+
+var widthScale_dot_2 = d3.scale.linear()
+    .range([ 0, width_dot_2]);
+
+var heightScale_dot_2 = d3.scale.ordinal()
+    .rangeRoundBands([ margin_dot_2.top, height_dot_2], 0.1);
+
+var xAxis_dot_2 = d3.svg.axis()
+    .scale(widthScale_dot_2)
+    .orient("bottom");
+
+var yAxis_dot_2 = d3.svg.axis()
+    .scale(heightScale_dot_2)
+    .orient("left")
+    .innerTickSize([0]);
+
+
+
+
+var fullwidth = 1000,
+    fullheight = 300;
+var svg_dot_2 = d3.select("#dot_2")
     .append("svg")
     .attr("width", fullwidth)
     .attr("height", fullheight);
@@ -129,7 +165,7 @@ d3.json("all_data.json", function(error, data) {
 	bar_data = data[0];
 	map_data = data[1];
 	dot_data = data[2];
-	
+	dot_2_data = data[3];
 
 	var brandNames = bar_data.map(function(d) { return d.brand; });
 	var ageNames = bar_data[0].values.map(function(d) { return d.age; });
@@ -412,11 +448,147 @@ d3.json("all_data.json", function(error, data) {
 	    .call(yAxis_dot);
 
 
+
+	/////////////////////////DOTS 2
+	//dot_data.sort(function(a, b) {
+	//	return d3.descending(+a.year2015, +b.year2015);
+	//    });
+
+	// in this case, i know it's out of 100 because it's percents.
+	widthScale_dot_2.domain([0., 0.9]);
+
+	// js map: will make a new array out of all the d.name fields
+	heightScale_dot_2.domain(dot_2_data[0].values.map(function(d) { return d.question; } ));
+
+
+	// Make the faint lines from y labels to highest dot
+	//console.log(dot_2_data);
+	var linesGrid_2 = svg_dot_2.selectAll("lines.grid")
+	    .data(dot_2_data[0].values)
+	    .enter()
+	    .append("line");
+
+	linesGrid_2.attr("class", "grid")
+	    .attr("x1", margin_dot_2.left)
+	    .attr("y1", function(d) {
+		    return heightScale_dot_2(d.question) + heightScale_dot_2.rangeBand()/2;
+		})
+	    .attr("x2", function(d) {
+		    return margin_dot_2.left + widthScale_dot_2(+d.customer_score);
+
+		})
+	    .attr("y2", function(d) {
+		    return heightScale_dot_2(d.question) + heightScale_dot_2.rangeBand()/2;
+		});
+
+	// Make the dotted lines between the dots
+	var linesBetween_2 = svg_dot_2.selectAll("lines.between")
+	    .data(dot_2_data[0].values)
+	    .enter()
+	    .append("line");
+
+	linesBetween_2.attr("class", "between")
+	    .attr("x1", function(d) {
+		    return margin_dot_2.left + widthScale_dot_2(+d.non_customer_score);
+		})
+	    .attr("y1", function(d) {
+		    return heightScale_dot_2(d.question) + heightScale_dot_2.rangeBand()/2;
+		})
+	    .attr("x2", function(d) {
+		    return margin_dot_2.left + widthScale_dot_2(d.customer_score);
+		})
+	    .attr("y2", function(d) {
+		    return heightScale_dot_2(d.question) + heightScale_dot_2.rangeBand()/2;
+		})
+	    .attr("stroke-dasharray", "5,5")
+	    .attr("stroke-width", function(d, i) {
+		    return "0.5";
+		});
+
+
+	// Make the 
+	var dot_2s_non_customer = svg_dot_2.selectAll("circle.y1990")
+	    .data(dot_2_data[0].values)
+	    .enter()
+	    .append("circle");
+
+	dot_2s_non_customer
+	    .attr("class", "y1990")
+	    .attr("cx", function(d) {
+		    return margin_dot_2.left + widthScale_dot_2(+d.non_customer_score);
+		})
+	    .attr("r", heightScale_dot_2.rangeBand()/5)
+	    .attr("cy", function(d) {
+		    return heightScale_dot_2(d.question) + heightScale_dot_2.rangeBand()/2;
+		})
+	    .style("stroke", function(d){
+		    if (d.name === "The World") {
+			return "black";
+		    }
+		})
+	    .style("fill", function(d){
+		    if (d.name === "The World") {
+			return "darkorange";
+		    }
+		})
+	    .append("title")
+	    .text(function(d) {
+		    return d.question + " in 1990: " + d.non_customer_score + "%";
+		});
+
+	// Make the dot_2s for 2015
+
+	var dot_2s_customer = svg_dot_2.selectAll("circle.y2015")
+	    .data(dot_2_data[0].values)
+	    .enter()
+	    .append("circle");
+
+	dot_2s_customer
+	    .attr("class", "y2015")
+	    .attr("cx", function(d) {
+		    return margin_dot_2.left + widthScale_dot_2(+d.customer_score);
+		})
+	    .attr("r", heightScale_dot_2.rangeBand()/5)
+	    .attr("cy", function(d) {
+		    return heightScale_dot_2(d.question) + heightScale_dot_2.rangeBand()/2;
+		})
+	    .style("stroke", function(d){
+		    if (d.name === "The World") {
+			return "black";
+		    }
+		})
+	    .style("fill", function(d){
+		    if (d.name === "The World") {
+			return "#476BB2";
+		    }
+		})
+	    .append("title")
+	    .text(function(d) {
+		    return d.question + " : " + d.customer_score + "%";
+		});
+
+	// add the axes
+
+	svg_dot_2.append("g")
+	    .attr("class", "x axis dot_2")
+	    .attr("transform", "translate(" + margin_dot_2.left + "," + height + ")")
+	    .attr("opacity", "0")
+	    .call(xAxis_dot_2);
+
+	svg_dot_2.append("g")
+	    .attr("class", "y axis dot_2")
+	    .attr("transform", "translate(" + margin_dot_2.left + ",0)")
+	    .call(yAxis_dot_2);
+
+
+
+
 	    //Legend
 
 	var selector = d3.select("#drop")
 	    .append("select")
 	    .attr("id","dropdown")
+	    .attr("onchange", "showData()")
 	    .on("change", function(d){
 		    selection = document.getElementById("dropdown");
 		    y.domain([0, d3.max([bar_data[brandNames.indexOf(selection.value)]], function(brand){
@@ -455,7 +627,7 @@ d3.json("all_data.json", function(error, data) {
                                 .attr("opacity", 1);
 			    
                             var prop = mdata.values[d.id];//d.properties;
-                            var string = "<p><strong>Market Area Name</strong>: " + prop.dma1 + "</p>";
+                            var string = "<p><strong>Market Area Name</strong>: " + prop["Designated Market Area (DMA)"] + "</p>";
                             string += "<p><strong>Percent of " +selection.value.slice(0, selection.value.indexOf('(')) + " customers</strong>: " + (prop.value).toFixed(0) + "% </p>";
                             d3.select("#textbox")
                                 .html("")
@@ -482,7 +654,7 @@ d3.json("all_data.json", function(error, data) {
 
 		    linesGrid.attr("class", "grid")
 		    .attr("y1", function(d, i) {
-			    console.log(dot_plot_data.values);
+			    console.log(i, dot_plot_data.values[i]);
 			    return heightScale_dot(dot_plot_data.values[i].question) + heightScale_dot.rangeBand()/2;
 			})
 		    .attr("x2", function(d, i) {
@@ -517,10 +689,6 @@ d3.json("all_data.json", function(error, data) {
 			})
 		    .attr("cy", function(d, i) {
 			    return heightScale_dot(dot_plot_data.values[i].question) + heightScale_dot.rangeBand()/2;
-			})
-		    .append("title")
-		    .text(function(d) {
-			    return d.question + " in 1990: " + d.non_customer_score + "%";
 			});
 
 
@@ -533,10 +701,62 @@ d3.json("all_data.json", function(error, data) {
 			})
 		    .attr("cy", function(d, i) {
 			    return heightScale_dot(dot_plot_data.values[i].question) + heightScale_dot.rangeBand()/2;
+			});
+
+
+
+		    ///////DOT 2
+		    var dot_2_plot_data = dot_2_data[brandNames.indexOf(selection.value)];
+
+		    linesGrid_2.attr("class", "grid")
+		    .attr("y1", function(d, i) {
+			    console.log(dot_2_plot_data.values);
+			    return heightScale_dot_2(dot_2_plot_data.values[i].question) + heightScale_dot_2.rangeBand()/2;
 			})
-		    .append("title")
-		    .text(function(d) {
-			    return d.question + " in 2015: " + d.customer_score + "%";
+		    .attr("x2", function(d, i) {
+			    return margin_dot_2.left + widthScale_dot_2(+dot_2_plot_data.values[i].customer_score);
+			})
+		    .attr("y2", function(d, i) {
+			    return heightScale_dot_2(dot_2_plot_data.values[i].question) + heightScale_dot_2.rangeBand()/2;
+			});
+
+
+
+		    linesBetween_2.attr("class", "between")
+		    .transition()
+		    .duration(1000)
+		    .attr("x1", function(d, i) {
+			    return margin_dot_2.left + widthScale_dot_2(+dot_2_plot_data.values[i].non_customer_score);
+			})
+		    .attr("y1", function(d, i) {
+			    return heightScale_dot_2(dot_2_plot_data.values[i].question) + heightScale_dot_2.rangeBand()/2;
+			})
+		    .attr("x2", function(d, i) {
+			    return margin_dot_2.left + widthScale_dot_2(dot_2_plot_data.values[i].customer_score);
+			})
+		    .attr("y2", function(d) {
+			    return heightScale_dot_2(d.question) + heightScale_dot_2.rangeBand()/2;
+			});
+
+		    dot_2s_non_customer
+		    .attr("class", "y1990")
+		    .attr("cx", function(d, i) {
+			    return margin_dot_2.left + widthScale_dot_2(+dot_2_plot_data.values[i].non_customer_score);
+			})
+		    .attr("cy", function(d, i) {
+			    return heightScale_dot_2(dot_2_plot_data.values[i].question) + heightScale_dot_2.rangeBand()/2;
+			});
+
+
+		    dot_2s_customer
+		    .attr("class", "y2015")
+		    .transition()
+		    .duration(1000)
+		    .attr("cx", function(d, i) {
+			    return margin_dot_2.left + widthScale_dot_2(+dot_2_plot_data.values[i].customer_score);
+			})
+		    .attr("cy", function(d, i) {
+			    return heightScale_dot_2(dot_2_plot_data.values[i].question) + heightScale_dot_2.rangeBand()/2;
 			});
 
 
@@ -580,7 +800,7 @@ d3.json("all_data.json", function(error, data) {
 	    .data(catNames)
 	    .enter().append("g")
 	    .attr("class", "legend")
-	    .attr("transform", function(d,i) { return "translate(0," + i * 20 + ")"; })
+	    .attr("transform", function(d,i) { return "translate(0," + i * 20  + ")"; })
 	    .style("opacity","0");
 	
 	legend.append("rect")
@@ -596,6 +816,6 @@ d3.json("all_data.json", function(error, data) {
 	    .style("text-anchor", "end")
 	    .text(function(d) {return d; });
 	
-	legend.transition().duration(500).delay(function(d,i){ return 1300 + 100 * i; }).style("opacity","1");
+	legend.transition().duration(500).delay(function(d,i){ return 500 + 100 * i; }).style("opacity","1");
     });
     });

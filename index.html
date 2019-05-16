@@ -41,7 +41,7 @@ body {
 
 #textbox {
   position: absolute;
-  top: 90px;
+  top: 170px;
   left: 800px;
   height: 100px;
 }
@@ -83,7 +83,7 @@ stroke-width: 1;
 }
 
 circle.y2015 {
-fill: #92c5de;
+fill: #23637a;
 }
 
 circle.y1990 {
@@ -123,19 +123,34 @@ color: gray;
 }
 </style>
 <body>
+  <img src="./logo.png" style="width:10%;">
+    <script>
+    function showData() {
+        var theSelect = dropdown;
+    console.log(theSelect);
+        var firstP = document.getElementById('firstP');
+        firstP.innerHTML = (theSelect[theSelect.selectedIndex].value.slice(0, theSelect[theSelect.selectedIndex].value.indexOf("(")) + " Customer Profile");
+    //secondP.innerHTML = ('Its value is: ' + theSelect[theSelect.selectedIndex].value);
+    //thirdP.innerHTML = ('Its text is: ' + theSelect[theSelect.selectedIndex].text);
+    }
+    </script>
+
   <script src="https://d3js.org/d3.v3.min.js"></script>
   <script src="https://d3js.org/topojson.v1.min.js"></script>
 
+  <h2 id="firstP" align="center">Age Perfect Customer Profile</h2>  
+  <div id="drop" align="center">Select a brand: &nbsp;</div>
   
-  <div id="drop" align=center></div>
-
   <div class="row">
     <div class="column">  <h4 align="center">Age Distribution</h4><div id='vis-container'></div></div>
     <div class="column">  <h4 aligh="center">Location Distribution</h4><div  id='map'></div>
       <div id="textbox" ></div>
     </div>
   </div>
-  <div id='dot'></div>
+  <h4 align="center">Beauty Routine</h4>
+  <div id='dot' align="center"></div>
+  <h4 align="center">Retail Behavior</h4>
+  <div id='dot_2' align="center"></div>
 
 
 
