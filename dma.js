@@ -1,4 +1,4 @@
-var width_map = 960,
+var width_map = 600,
     height_map = 500;
 // sets the type of view
 var projection = d3.geo.albersUsa()
@@ -9,7 +9,7 @@ var projection = d3.geo.albersUsa()
 var path = d3.geo.path().projection(projection);
 var xScale_map = d3.scale.linear()
     .domain([0, 7])
-    .range([0, 500]);
+    .range([0, 400]);
 
 var xAxis_map = d3.svg.axis()
     .scale(xScale_map)

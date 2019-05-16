@@ -41,9 +41,8 @@ body {
 
 #textbox {
   position: absolute;
-  top: 400px;
-  left: 50px;
-  width: 275px;
+  top: 90px;
+  left: 800px;
   height: 100px;
 }
 
@@ -53,17 +52,94 @@ body {
   margin: 0;
 }
 
+ .column {
+  float: left;
+  width: 40%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+} 
 
 
+div.y2015 {
+color: #d5d5d5;
+display: inline;
+}
+div.y1990 {
+color: #92c5de;
+display: inline;
+}
+
+svg {
+background-color: white;
+}
+
+circle {
+stroke-width: 1;
+}
+
+circle.y2015 {
+fill: #92c5de;
+}
+
+circle.y1990 {
+fill: #d5d5d5;
+}
+
+circle:hover {
+stroke-width: 3;
+stroke: white;
+}
+
+line.grid {
+stroke: #eee;
+}
+
+line.between {
+stroke: black;
+}
+
+.axis path,
+.axis line {
+fill: none;
+stroke: black;
+stroke-width: 0;
+shape-rendering: crispEdges;
+}
+
+.axis text {
+font-family: sans-serif;
+font-size: 14px;
+}
+
+.xlabel {
+font-famile: sans-serif;
+font-size: 11px;
+color: gray;
+}
 </style>
 <body>
   <script src="https://d3js.org/d3.v3.min.js"></script>
   <script src="https://d3js.org/topojson.v1.min.js"></script>
 
-  <div id="textbox"></div>
+  
   <div id="drop" align=center></div>
-  <div id='vis-container'></div>
-  <div id='map'></div>
+
+  <div class="row">
+    <div class="column">  <div id='vis-container'></div></div>
+    <div class="column">  <div  id='map'></div> <br>
+      <div id="textbox" ></div>
+    </div>
+  </div>
+  <div id='dot'></div>
+
+
+
+
   <script src="grouped_bar.js"></script>
   <!--script src="dma.js"></script-->
 </body>
