@@ -41,8 +41,8 @@ body {
 
 #textbox {
   position: absolute;
-  top: 170px;
-  left: 800px;
+  top: 470px;
+  left: 300px;
   height: 100px;
 }
 
@@ -121,6 +121,13 @@ font-famile: sans-serif;
 font-size: 11px;
 color: gray;
 }
+
+.parent {
+    margin-bottom: 15px;
+    padding: 10px;
+    color: #0A416B;
+    clear:both;
+}
 </style>
 <body>
   <img src="logo.png" style="width:10%;">
@@ -140,20 +147,40 @@ color: gray;
   <script src="https://d3js.org/d3.v3.min.js"></script>
   <script src="https://d3js.org/topojson.v1.min.js"></script>
 
-  <h2 id="firstP" align="center">Age Perfect Customer Profile</h2>  
-  <div id="drop" align="center">Select a brand: &nbsp;</div>
-  
-  <div class="row">
-    <div class="column">  <h4 align="center">Age Distribution</h4><div id='vis-container'></div></div>
-    <div class="column">  <h4 aligh="center">Location Distribution</h4><div  id='map'></div>
-      <div id="textbox" ></div>
-    </div>
+  <div style="position:fixed;width:90%;">
+    <h2 id="firstP" align="center" style="padding-left:560px;padding-top:70px;">Age Perfect Customer Profile</h2>  
+    <div id="drop" align="center" style="float:right;">Select a brand: &nbsp;</div>
   </div>
-  <h4 align="center">Beauty Routine</h4>
-  <div id='dot' align="center"></div>
-  <h4 align="center">Retail Behavior</h4>
-  <div id='dot_2' align="center"></div>
+  
 
+  <table>
+    <tr>
+      <div id="parent">
+	<h4 style="padding-left:300px;">Age Distribution</h4>
+	<div id='vis-container'></div>
+      </div>
+    </tr>
+    <tr>
+      <div id="parent">
+	<h4 style="padding-left:300px;">Location Distribution</h4>
+	<div id='map' style="padding-left:50px;"></div>
+	<div id="textbox" style="float:right;"></div>
+      </div>
+    </tr>
+    <tr>
+      <div id="parent">
+	<h4 style="padding-left:300px;">Beauty Routine</h4>
+	<div id='dot'></div>
+      </div>
+    </tr>
+    <tr>
+      <div id="parent">
+	<h4 style="padding-left:300px;">Retail Behavior</h4>
+	<div id='dot_2'></div>
+      </div>
+    </tr>
+  </table>
+    
 
 
 

@@ -1,6 +1,6 @@
 ///////////////////BAR VARIABLES
-var margin = {top: 20, right: 0, bottom: 20, left: 40},
-    width = 500 - margin.left - margin.right,
+var margin = {top: 20, right: 0, bottom: 20, left: 100},
+    width = 600 - margin.left - margin.right,
     height = 300 - margin.top - margin.bottom;
 
 var x0 = d3.scale.ordinal()
@@ -90,7 +90,7 @@ var colorScale = d3.scale.linear()
 
 
 /////////////////////DOT PLOT
-var margin_dot = {top: 10, right: 25, bottom: 10, left: 400};
+var margin_dot = {top: 10, right: 25, bottom: 10, left: 360};
 
 var width_dot = 1000 - margin_dot.left - margin_dot.right,
     height_dot = 200 - margin_dot.top - margin_dot.bottom;
@@ -126,7 +126,7 @@ var svg_dot = d3.select("#dot")
 
 
 /////////////////////DOT PLOT 2
-var margin_dot_2 = {top: 10, right: 25, bottom: 10, left: 600};
+var margin_dot_2 = {top: 10, right: 25, bottom: 10, left: 590};
 
 var width_dot_2 = 1000 - margin_dot_2.left - margin_dot_2.right,
     height_dot_2 = 300 - margin_dot_2.top - margin_dot_2.bottom;
@@ -329,7 +329,7 @@ d3.json("all_data.json", function(error, data) {
 
 
 	// Make the faint lines from y labels to highest dot
-	console.log(dot_data);
+
 	var linesGrid = svg_dot.selectAll("lines.grid")
 	    .data(dot_data[0].values)
 	    .enter()
@@ -652,9 +652,19 @@ d3.json("all_data.json", function(error, data) {
 
 		    var dot_plot_data = dot_data[brandNames.indexOf(selection.value)];
 
+		    dot_plot_data.values = dot_plot_data.values.sort(function(x, y){
+		    	    return d3.descending(x.customer_score, y.customer_score);
+		    	});
+		    
+		    heightScale_dot.domain(dot_plot_data.values.map(function(d) { return d.question; } ));
+		    
+		    svg_dot.selectAll("g.y.axis")
+                    .transition()
+		    .duration(500)
+                    .call(yAxis_dot);
+
 		    linesGrid.attr("class", "grid")
 		    .attr("y1", function(d, i) {
-			    console.log(i, dot_plot_data.values[i]);
 			    return heightScale_dot(dot_plot_data.values[i].question) + heightScale_dot.rangeBand()/2;
 			})
 		    .attr("x2", function(d, i) {
@@ -678,8 +688,8 @@ d3.json("all_data.json", function(error, data) {
 		    .attr("x2", function(d, i) {
 			    return margin_dot.left + widthScale_dot(dot_plot_data.values[i].customer_score);
 			})
-		    .attr("y2", function(d) {
-			    return heightScale_dot(d.question) + heightScale_dot.rangeBand()/2;
+		    .attr("y2", function(d, i) {
+			    return heightScale_dot(dot_plot_data.values[i].question) + heightScale_dot.rangeBand()/2;
 			});
 
 		    dots_non_customer
@@ -705,12 +715,25 @@ d3.json("all_data.json", function(error, data) {
 
 
 
+
 		    ///////DOT 2
 		    var dot_2_plot_data = dot_2_data[brandNames.indexOf(selection.value)];
 
+                    dot_2_plot_data.values = dot_2_plot_data.values.sort(function(x, y){
+                            return d3.descending(x.customer_score, y.customer_score);
+                        });
+
+                    heightScale_dot_2.domain(dot_2_plot_data.values.map(function(d) { return d.question; } ));
+
+                    svg_dot_2.selectAll("g.y.axis")
+                    .transition()
+                    .duration(500)
+                    .call(yAxis_dot_2);
+
+
+
 		    linesGrid_2.attr("class", "grid")
 		    .attr("y1", function(d, i) {
-			    console.log(dot_2_plot_data.values);
 			    return heightScale_dot_2(dot_2_plot_data.values[i].question) + heightScale_dot_2.rangeBand()/2;
 			})
 		    .attr("x2", function(d, i) {
@@ -734,8 +757,8 @@ d3.json("all_data.json", function(error, data) {
 		    .attr("x2", function(d, i) {
 			    return margin_dot_2.left + widthScale_dot_2(dot_2_plot_data.values[i].customer_score);
 			})
-		    .attr("y2", function(d) {
-			    return heightScale_dot_2(d.question) + heightScale_dot_2.rangeBand()/2;
+		    .attr("y2", function(d, i) {
+			    return heightScale_dot_2(dot_2_plot_data.values[i].question) + heightScale_dot_2.rangeBand()/2;
 			});
 
 		    dot_2s_non_customer
