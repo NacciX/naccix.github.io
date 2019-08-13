@@ -1,69 +1,92 @@
-<!DOCTYPE html>
+
 <meta charset="utf-8">
+
+<!-- Load d3.js -->
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="https://cdn.rawgit.com/Neilos/bihisankey/master/bihisankey.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Load the sankey.js function -->
+<!--<script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/sankey.js"></script>-->
+
+<!-- Create a div where the graph will take place -->
+
+
+<!-- Add style to links or they won't appear properly-->
 <style>
-
-body {
-  font: 14px sans-serif;
-}
-
-.axis path,
-.axis line {
+.link {
   fill: none;
   stroke: #000;
+  stroke-opacity: .2;
+}
+.link:hover {
+  stroke-opacity: .5;
+}
+
+
+.node rect {
+  cursor: move;
   shape-rendering: crispEdges;
 }
 
-.x.axis path {
-  display: none;
+.node text {
+  pointer-events: none;
+  text-shadow: 1px 1px 2px #fff;
+  font-size: 0.8em;
+  font-family: sans-serif;
 }
 
-
-.background {
-  fill: none;
-  pointer-events: all;
-}
-
-.graticule {
-  fill: none;
-  stroke: #777;
-  stroke-width: .5;
-  stroke-opacity: .7;
-}
-
-#dma-borders {
-  fill: none;
-  stroke: black;
-
-  stroke-linejoin: round;
-  stroke-linecap: round;
+#tooltip {
+  position: absolute;
+  pointer-events: none;
+  font-size: 0.7em;
+  font-family: sans-serif;
+  padding: 3px;
+  width: auto;
+  height: auto;
+  background-color: #F2F2F2;
+  -webkit-box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);
+  -mox-box-shadow: 0px 0px 0px 5px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 0px 5px rbga(0, 0, 0, 0.4);
   pointer-events: none;
 }
 
-#textbox {
-  position: absolute;
-  top: 400px;
-  left: 50px;
-  width: 275px;
-  height: 100px;
-}
-
-#textbox text p {
-  font-family: Arial, Helvetica;
-  font-size: .8em;
+.value {
+  white-space: pre-line;
   margin: 0;
 }
 
+ .column {
+  float: left;
+  width: 50%;
+}
 
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+} 
 
 </style>
 <body>
-  <script src="https://d3js.org/d3.v3.min.js"></script>
-  <script src="http://d3js.org/topojson.v1.min.js"></script>
 
-  <div id="textbox"></div>
-  <div id="drop" align=center></div>
-  <div id='vis-container'></div>
-  <div id='map'></div>
-  <script src="grouped_bar.js"></script>
-  <script src="dma.js"></script>
+
+  
+
+  <center>
+    <div>
+      <input type="text" id="myVal" placeholder="Enter a website">
+      <input name="Submit"  type="submit" id="update_chart"  text="Submit">
+    </div>
+  </center>
+
+  <div id="chart"></div>
+
+
+  <script src="app.js"></script>  
+
+
+  
+  
 </body>
